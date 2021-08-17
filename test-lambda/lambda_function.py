@@ -6,7 +6,7 @@ print('Loading function')
 
 s3 = boto3.client('s3')
 
-# Coming from Github Actions
+# Coming from Github Actions here
 
 def lambda_handler(event, context):
     print ("Event", event)
