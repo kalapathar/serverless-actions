@@ -1,0 +1,26 @@
+name: deploy-user-creation-lambda
+
+on:
+  push:
+    paths:
+      - 'test-lambda/*'
+
+jobs:
+  deploy_source:
+    name: build and deploy lambda
+    strategy:
+      matrix:
+        node-version: [12.x]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Zip dist folder contents
+        run: cd test-lambda && zip -r ./test-lambda ./*
+      - name: deploy zip to aws lambda
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: 'us-east-1'
+          function_name: serverless-actions
+          zip_file: ./test-lambda/test-lambda.zip
